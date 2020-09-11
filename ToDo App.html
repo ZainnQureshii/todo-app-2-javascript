@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script
+		src="https://code.jquery.com/jquery-3.3.1.js"
+		integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+		crossorigin="anonymous">
+	</script>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	
+	<link rel="stylesheet" type="text/css" href="style.css">
+	
+	
+
+	<style type="text/css">
+		.well{
+			height: 7rem;
+		}
+	</style>
+	
+</head>
+<body onload="getTodos()">
+
+    <div class="container">
+      <div class="header clearfix">
+        <h3 class="text-muted">ToDo Application</h3>
+      </div>
+
+      <div class="jumbotron">
+        <h1>ToDo Application</h1>
+	<br>
+	<form id="myForm">
+        <label>New Task</label>
+        <input type="text" name="task" class="form-control" id="toDo" placeholder="Enter Your New Task Here">
+    <br>
+       <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+      </div>
+
+      <div class="row marketing">
+        <div class="col-lg-12">
+          <div id="toDoResult"></div>
+        </div>
+	  </div>
+
+      <footer class="footer">
+        <p>&copy; 2018 ToDo Company, Inc.</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+
+    
+  </body>
+</html>
+
+
+<script type="text/javascript">
+	
+ 	document.getElementById('myForm').addEventListener('submit', addTasks);
+ 	
+ 	var td=[]
+ 	
+ 	function deleteTask(ids){
+    val = JSON.parse(localStorage.getItem('toDos', JSON.stringify(td)));
+    val.splice(ids,1)
+    localStorage.setItem('toDos', JSON.stringify(val));
+    getTodos();
+ 	}
+ 	function addTasks(e){
+
+ 		var toDos = [];
+ 		try
+ 		{
+			toDo = document.getElementById('toDo').value;
+		
+			if(toDo==""){
+				alert('Please Enter Task');
+				return false;
+			}
+
+			var tasks = {
+				name: toDo
+
+			}
+			
+			if(localStorage.getItem('toDos')===null){
+				
+
+				toDos.push(tasks);
+
+				localStorage.setItem('toDos', JSON.stringify(toDos));
+			}
+
+			else{
+				var toDos = JSON.parse(localStorage.getItem('toDos'));
+
+				toDos.push(tasks);
+				localStorage.setItem('toDos', JSON.stringify(toDos));
+			}
+		}
+		catch(e)
+		{
+			console.log(e)
+		}
+		getTodos();
+		td=toDos;
+ 		e.preventDefault();
+ 	}
+
+
+ 	function getTodos(){
+ 		var toDos = JSON.parse(localStorage.getItem('toDos'));
+        if (toDos!==null)
+        {
+ 		toDoResult = document.getElementById('toDoResult');
+
+ 		toDoResult.innerHTML = "";
+
+ 		for(var i = 0; i < toDos.length; i++){
+ 			taskName = toDos[i].name;
+
+ 			toDoResult.innerHTML += '<div class="well">'+
+ 									'<h4>'+(i+1)+'. '+taskName+
+ 									' <button id='+i+' onclick="deleteTask(this.id)" class="btn btn-danger">Delete</button>'+
+ 									'</h4>'
+ 									'</div>';
+ 		}}
+
+
+
+
+ 	}
+</script>
